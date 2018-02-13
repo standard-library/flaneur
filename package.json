@@ -1,0 +1,23 @@
+{
+  "name": "@standard-library/flaneur",
+  "version": "0.1.0",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "babel index.js --out-dir build",
+    "test": "tape -r babel-register test/**/*.js | faucet"
+  },
+  "repository": "https://github.com/standard-library/flaneur.git",
+  "author": "Standard Library",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.18.0",
+    "faucet": "^0.0.1",
+    "tape": "^4.6.3"
+  },
+  "dependencies": {
+    "kefir": "^3.7.0",
+    "moveto": "^1.7.1"
+  }
+}
