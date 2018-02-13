@@ -23,17 +23,18 @@ function flâneur({ modifier = REASONABLE_MODIFIER }, scrollY) {
   );
 
   const requestPlan = K.combine([modifier, requestedPath], (m, [from, to]) => {
-    const destinationOffset = typeof to === "number" ? to : offsetTop(to);
-    const duration = m(Math.abs(from - destinationOffset));
+    const destination = typeof to === "number" ? to : offsetTop(to);
+    const delta = destination - from;
+    const duration = m(Math.abs(delta));
 
     return {
       duration: duration,
-      destination: to
+      delta: delta
     };
   });
 
   requestPlan.observe(plan => {
-    manager.move(plan.destination, {
+    manager.move(plan.delta, {
       duration: plan.duration
     });
   });
