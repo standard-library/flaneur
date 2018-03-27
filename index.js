@@ -2,6 +2,7 @@ import { Kefir as K } from "kefir";
 import MoveTo from "moveto";
 
 const REASONABLE_MODIFIER = K.constant(d => d / 4);
+const NO_OFFSET = K.constant(0);
 
 function offsetTop(element) {
   if (!element.getClientRects().length) {
@@ -14,7 +15,10 @@ function offsetTop(element) {
   return rect.top + win.pageYOffset;
 }
 
-function flâneur({ modifier = REASONABLE_MODIFIER }, scrollY) {
+function flâneur(
+  { modifier = REASONABLE_MODIFIER, offset = NO_OFFSET },
+  scrollY
+) {
   const manager = new MoveTo();
 
   const destinationStream = K.pool();
@@ -22,16 +26,23 @@ function flâneur({ modifier = REASONABLE_MODIFIER }, scrollY) {
     destinationStream
   );
 
-  const requestPlan = K.combine([modifier, requestedPath], (m, [from, to]) => {
-    const destination = typeof to === "number" ? to : offsetTop(to);
-    const delta = destination - from;
-    const duration = m(Math.abs(delta));
+  const requestPlan = K.combine(
+    [modifier, offset, requestedPath],
+    (m, o, [from, to]) => {
+      if (typeof from !== "number") {
+        throw `The scrollY property is not a number: ${from}`;
+      }
 
-    return {
-      duration: duration,
-      delta: delta
-    };
-  });
+      const destination = typeof to === "number" ? to : offsetTop(to);
+      const delta = destination - from + o;
+      const duration = m(Math.abs(delta));
+
+      return {
+        duration: duration,
+        delta: delta
+      };
+    }
+  );
 
   requestPlan.observe(plan => {
     manager.move(plan.delta, {
