@@ -27,7 +27,7 @@ function flâneur(
   );
 
   const requestPlan = K.combine(
-    [modifier, offset, requestedPath],
+    [modifier, offset.sampledBy(requestedPath), requestedPath],
     (m, o, [from, to]) => {
       if (typeof from !== "number") {
         throw `The scrollY property is not a number: ${from}`;
