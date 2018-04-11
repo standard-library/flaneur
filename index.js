@@ -22,15 +22,21 @@ function flâneur(
   const manager = new MoveTo();
 
   const destinationStream = K.pool();
-  const requestedPath = K.combine([scrollY, destinationStream]).sampledBy(
-    destinationStream
-  );
+  const requestedPath = K.combine([
+    scrollY,
+    destinationStream,
+    offset
+  ]).sampledBy(destinationStream);
 
   const requestPlan = K.combine(
-    [modifier, offset.sampledBy(requestedPath), requestedPath],
-    (m, o, [from, to]) => {
+    [modifier, requestedPath],
+    (m, [from, to, o]) => {
       if (typeof from !== "number") {
         throw `The scrollY property is not a number: ${from}`;
+      }
+
+      if (typeof o !== "number") {
+        throw `The offset property is not a number: ${o}`;
       }
 
       const destination = typeof to === "number" ? to : offsetTop(to);
