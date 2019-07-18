@@ -4,15 +4,16 @@
   "main": "build/index.js",
   "scripts": {
     "build": "babel index.js --out-dir build",
-    "test": "tape -r babel-register test/**/*.js | faucet"
+    "test": "tape -r @babel/register test/**/*.js | faucet"
   },
   "repository": "https://github.com/standard-library/flaneur.git",
   "author": "Standard Library",
   "license": "MIT",
   "devDependencies": {
-    "babel-cli": "^6.18.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-register": "^6.18.0",
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/register": "^7.5.5",
     "faucet": "^0.0.1",
     "tape": "^4.6.3"
   },
